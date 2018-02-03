@@ -72,7 +72,7 @@ def main():     # главный метод который все собирае
             html = get_html(link)       # получаем html предполагаемого товара
             sleep(rand)     # пауза
             if part_number == check_part_number(html):      # проверям равняется ли партномер предполагаемого товара тому что мы ищем
-                price = (get_price(html)).replace(",", "")      # если да то берем его цену
+                price = (get_price(html)).replace(",", "")      # если да то берем его цену, и убираем запятую если есть USA формат типа 1,259.69
                 write_to_file(brand, part_number, result_file, price, link)     # записываем в файл данные
                 print(brand, part_number, price, link)      # вывод того что получилось для контроля из консоли
                 is_product_find = True      # так как товар нашелся переопределяем флаг что товар найден
