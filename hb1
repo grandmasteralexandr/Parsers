@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+import re
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+
+def get_html(url):
+    r = requests.get(url, verify=False)
+    html = r.text
+    return html
+
+
+def get_all_brand(html):
+    s = BeautifulSoup(html, 'lxml')
+    all_tr = s.find_all('tr')
+    all_brands = []
+    base_url = 'https://handbook.uttc-usa.com/prc/'
+    for link in all_tr:
+        try:
+            all_brands.append(base_url + link.find('td').find('a').get('href'))
+        except:
+            continue
+    return all_brands
+
+
+def get_all_next_page(html, brand_uri):
+    s = BeautifulSoup(html, 'lxml')
+    all_next_page = []
+    base_url = 'https://handbook.uttc-usa.com/prc/work-file1.php?page='
+    try:
+        page_count = s.find('nav', class_='pagination').find_all_next('a')[-1].find('strong').text
+    except:
+        page_count = "0"
+    for page in range(2, (int(page_count) + 1)):
+        all_next_page.append(base_url + str(page) + "&" + brand_uri)
+    return all_next_page
+
+
+def main():
+    start = datetime.now()
+    index = 0
+    url = 'https://handbook.uttc-usa.com/prc/price.php'
+    html = get_html(url)
+    all_brands = get_all_brand(html)
+    for link in all_brands:
+        try:
+            brand_uri = re.search("(\?)(?P<uri>.*)$", link).group("uri")
+        except:
+            continue
+        index += 1
+        print ("Brand # " + str(index))
+        print link
+        html = get_html(link)
+        all_next_page = get_all_next_page(html, brand_uri)
+        print all_next_page
+        page = 0
+        for page_link in all_next_page:
+            page += 1
+            print ("Page # " + str(page))
+            try:
+                get_html(page_link)
+            except:
+                continue
+
+    end = datetime.now()
+    print ("Total duration: " + str(end - start))
+
+
+if __name__ == '__main__':
+    main()
