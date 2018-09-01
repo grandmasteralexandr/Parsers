@@ -15,8 +15,8 @@ class Teacher:
 # защита при импорте файла (будет импортироватся только класс, код ниже не выполнится)
 if __name__ == "__main__":
     # задаем список учителей
-    teacher_list = ["Alexandr Okunev", "Dmitro Malyar", "Alexandr Alfimov", "Yurij Chekan", "Anton Sviridenko",
-                    "Dmitro Bekeshenko", "Marina Shevchenko", ]
+    teacher_list = ["Alexandr Zalenskiy", "Dmitro Napoleon", "Alex Memfis", "Coca Cola", "Anton Pepsi",
+                    "Adron Kolaider", "Marina Volochkova", ]
     # ученики являются теми же учетилями, но этот список мы будем постоянно менять так что делаем копию
     remain_learners = list(teacher_list)
     # задаем пустой массив для объектов класса
